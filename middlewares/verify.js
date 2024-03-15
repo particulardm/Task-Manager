@@ -13,11 +13,6 @@ const verify = function (req, res, next) {
     try {
         const decoded = jwt.verify(token, secretKey);
         console.log(decoded);
-        res.status(200).json({ 
-            message: "You are now logged in",
-            username: decoded.username,
-            id: decoded.id
-        });
     } catch (error) {
         console.error(error);
         return res.status(400).json({ message: "wrong token!!" });
