@@ -4,7 +4,6 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/userModel');
 
-const uri = process.env.URI;
 const bcryptSalt = 10;
 
 
@@ -12,9 +11,6 @@ const registration = async function(req, res) {
     const { username, email, password } = req.body;
 
     try {
-        await mongoose.connect(uri);
-        console.log ('db connected');
-
         const hash = await bcrypt.hash(password, bcryptSalt);
         console.log(hash);
 
@@ -25,18 +21,13 @@ const registration = async function(req, res) {
         console.error(error);
         return res.status(400).json({ message: "couldn't finish the registration" });
     } finally {
-        await mongoose.disconnect();
-        console.log('db disconnected');
     }
-}
+};
 
 const login = async function(req, res) {
     const { username, password } = req.body;
 
     try {
-        await mongoose.connect(uri);
-        console.log ('db connected');
-
         const userExists = await User.exists({ username });
         if (!userExists) {
             console.error('The client sends incorrect login');
@@ -65,9 +56,7 @@ const login = async function(req, res) {
         console.error(error);
         return res.status(400).json({ message: "can't login" });
     } finally {
-        await mongoose.disconnect();
-        console.log('db disconnected');
     }
-}
+};
 
 module.exports = { registration, login }
